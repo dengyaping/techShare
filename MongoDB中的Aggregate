@@ -1,0 +1,20 @@
+使用聚合框架可以对集合中的文档进行变换和组合。可以用多个构件创建一个管道，用于对一连串的文档进行处理。构件有：筛选、投射、分组、排序、限制和跳过。
+
+aggregate语法
+db.collection.aggregate(pipeline, options)
+
+管道操作符
+1、$match
+   用于对文档集合进行筛选，在＄match中不能使用＄geoNear地理空间操作符及＄where表达式操作符。
+2、$project
+  使用”$project”可以从子文档中提取字段，可以重命名字段，可以移除字段。
+  例如：
+      包括title并排除name：
+        {$project:{title:1,name:0}}
+      把name重命名为title:
+        {$project:{title:"$name"}}
+      添加一个新的total字段，并用price和tax字段计算它的值:
+        {$project:{total:{$add:["$price","$tax"]}}}
+3、$group
+  可以根据文档特定字段的不同值进行分组
+  $group的输出是无序的，且该操作目前是在内存中进行的，所以不能用它来对大量个数的文档进行分组。
